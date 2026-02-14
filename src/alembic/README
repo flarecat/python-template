@@ -1,0 +1,34 @@
+Generic single-database configuration for Alembic.
+
+## セットアップ
+
+1. `src/alembic/env.py` を編集して、SQLAlchemyのBaseとモデルをインポート
+2. `target_metadata = Base.metadata` を設定
+
+## マイグレーション作成
+
+```bash
+cd src
+alembic revision --autogenerate -m "変更内容の説明"
+```
+
+## マイグレーション実行
+
+```bash
+cd src
+alembic upgrade head
+```
+
+## マイグレーション履歴確認
+
+```bash
+cd src
+alembic history
+```
+
+## 1つ前にロールバック
+
+```bash
+cd src
+alembic downgrade -1
+```

@@ -1,0 +1,50 @@
+# EditorConfig: https://editorconfig.org
+# 全エディタで統一的な基本設定を適用
+
+root = true
+
+# 全ファイル共通
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 2
+
+# Python
+[*.py]
+indent_size = 4
+max_line_length = 120
+
+# Markdown（末尾スペースが意味を持つため除外）
+[*.md]
+trim_trailing_whitespace = false
+
+# YAML
+[*.{yml,yaml}]
+indent_size = 2
+
+# JSON
+[*.json]
+indent_size = 2
+
+# JavaScript/TypeScript
+[*.{js,ts,jsx,tsx,vue}]
+indent_size = 2
+
+# Shell scripts
+[*.sh]
+indent_size = 2
+
+# Makefile（タブ必須）
+[Makefile]
+indent_style = tab
+
+# Docker
+[Dockerfile*]
+indent_size = 2
+
+# SQL
+[*.sql]
+indent_size = 2

@@ -1,0 +1,89 @@
+# pre-commit hooks configuration
+# See https://pre-commit.com for more information
+
+repos:
+  # 基本的なファイルチェック
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: end-of-file-fixer
+        name: ファイル末尾に改行を追加
+      - id: trailing-whitespace
+        name: 行末の空白を削除
+        args: [--markdown-linebreak-ext=md]
+        exclude: ^src/alembic/
+      - id: check-yaml
+        name: YAML構文チェック
+      - id: check-json
+        name: JSON構文チェック
+      - id: check-toml
+        name: TOML構文チェック
+      - id: check-added-large-files
+        name: 大きなファイルの追加をチェック
+        args: [--maxkb=1000]
+      - id: check-merge-conflict
+        name: マージコンフリクトマーカーをチェック
+      - id: check-case-conflict
+        name: ファイル名の大文字小文字の競合をチェック
+      - id: mixed-line-ending
+        name: 混在した改行コードをチェック
+        args: [--fix=lf]
+
+  # Python: Ruff (lint + format + import sort)
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.8.5
+    hooks:
+      - id: ruff
+        name: Ruff lint
+        args: [--fix, --exit-non-zero-on-fix]
+        exclude: ^src/alembic/
+      - id: ruff-format
+        name: Ruff format
+        exclude: ^src/alembic/
+
+  # Python: MyPy (型チェック)
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.14.1
+    hooks:
+      - id: mypy
+        name: MyPy型チェック
+        additional_dependencies: []
+        args: [--no-error-summary]
+        exclude: ^src/alembic/
+
+  # Node/JavaScript/TypeScript: Prettier
+  - repo: https://github.com/pre-commit/mirrors-prettier
+    rev: v4.0.0-alpha.8
+    hooks:
+      - id: prettier
+        name: Prettier format
+        types_or: [javascript, jsx, ts, tsx, json, yaml, markdown, css, scss]
+        exclude: ^(package-lock\.json|yarn\.lock|pnpm-lock\.yaml)$
+
+  # Node/JavaScript/TypeScript: ESLint
+  - repo: https://github.com/pre-commit/mirrors-eslint
+    rev: v9.18.0
+    hooks:
+      - id: eslint
+        name: ESLint
+        types_or: [javascript, jsx, ts, tsx, vue]
+        args: [--fix]
+        additional_dependencies:
+          - eslint@^9.0.0
+          - eslint-config-prettier@^9.0.0
+
+  # セキュリティチェック
+  - repo: https://github.com/Yelp/detect-secrets
+    rev: v1.5.0
+    hooks:
+      - id: detect-secrets
+        name: 機密情報の検出
+        args: [--baseline, .secrets.baseline]
+        exclude: |
+          (?x)^(
+            .*\.lock$|
+            .*package-lock\.json$|
+            .*yarn\.lock$|
+            .*pnpm-lock\.yaml$|
+            src/alembic/.*
+          )$

@@ -1,0 +1,129 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "python-dev-template"
+version = "1.0.0"
+description = "Python 3.12 development template with modern tooling"
+readme = "README.md"
+requires-python = ">=3.12"
+
+[tool.ruff]
+# Line length setting (slightly relaxed)
+line-length = 120
+target-version = "py312"
+
+# Exclude directories
+exclude = [
+    ".git",
+    ".venv",
+    "__pycache__",
+    "build",
+    "dist",
+    "src/alembic",
+]
+
+[tool.ruff.lint]
+# Enabled rules (slightly relaxed settings)
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "I",   # isort
+    "B",   # flake8-bugbear
+    "C4",  # flake8-comprehensions
+    "UP",  # pyupgrade
+]
+
+# Ignored rules
+ignore = [
+    "E501",  # line too long (let ruff's formatter handle this)
+    "B008",  # Do not perform function calls in argument defaults
+    "B904",  # Use `raise ... from err`
+    "C901",  # too complex
+    "W191",  # indentation contains tabs
+    "E111",  # indentation is not a multiple of four
+    "E114",  # indentation is not a multiple of four (comment)
+    "E117",  # over-indented
+]
+
+# Per-file ignore settings
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["F401"]  # unused imports in __init__.py
+
+[tool.ruff.lint.isort]
+# Import sorting settings
+known-first-party = ["src"]
+section-order = ["future", "standard-library", "third-party", "first-party", "local-folder"]
+
+[tool.ruff.format]
+# Formatter settings
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"
+
+# Docstring formatting
+docstring-code-format = true
+docstring-code-line-length = 100
+
+# Ruff as primary tool (integrates Black/isort functionality)
+# - Ruff: lint + format + import sorting
+# - MyPy: type checking only (covers what Ruff doesn't)
+
+[tool.mypy]
+# MyPy settings (type checking only)
+python_version = "3.12"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = false
+ignore_missing_imports = true
+no_error_summary = true
+show_error_codes = true
+namespace_packages = true
+explicit_package_bases = true
+exclude = [
+    "__pycache__",
+    ".git",
+    ".venv",
+    "build",
+    "dist",
+    "src/alembic",
+]
+
+[tool.pytest.ini_options]
+# Pytest settings
+testpaths = ["tests"]
+python_files = ["test_*.py", "*_test.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = [
+    "-v",
+    "--strict-markers",
+    "--tb=short",
+    "--cov-report=term-missing",
+    "--cov-report=html",
+]
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "integration: marks tests as integration tests",
+    "unit: marks tests as unit tests",
+]
+
+[tool.coverage.run]
+# Coverage settings
+source = ["."]
+omit = [
+    "*/tests/*",
+    "*/__pycache__/*",
+    "*/.venv/*",
+    "*/dist/*",
+    "*/build/*",
+]
+
+[tool.coverage.report]
+# Coverage report settings
+precision = 2
+show_missing = true
+skip_covered = false

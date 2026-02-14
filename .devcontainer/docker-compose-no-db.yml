@@ -1,0 +1,14 @@
+services:
+  # Main development container without PostgreSQL
+  app:
+    build:
+      context: ..
+      dockerfile: .devcontainer/Dockerfile
+    hostname: develop
+    volumes:
+      - ..:/workspace:cached
+    working_dir: /workspace
+    command: sleep infinity
+    environment:
+      - PYTHONPATH=/workspace
+    restart: unless-stopped

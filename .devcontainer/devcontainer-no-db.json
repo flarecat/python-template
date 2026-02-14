@@ -1,0 +1,151 @@
+{
+  "name": "Python 3.12 Development (No Database)",
+  "dockerComposeFile": "docker-compose-no-db.yml",
+  "service": "app",
+  "workspaceFolder": "/workspace",
+  "shutdownAction": "stopCompose",
+  "overrideCommand": false,
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "ms-python.mypy-type-checker",
+        "charliermarsh.ruff",
+        "esbenp.prettier-vscode",
+        "dbaeumer.vscode-eslint",
+        "editorconfig.editorconfig",
+        "streetsidesoftware.code-spell-checker",
+        "eamodio.gitlens",
+        "github.vscode-pull-request-github",
+        "ms-vscode-remote.remote-containers",
+        "ms-azuretools.vscode-docker",
+        "ms-vscode.vscode-json",
+        "redhat.vscode-yaml",
+        "humao.rest-client",
+        "yzhang.markdown-all-in-one",
+        "anthropic.claude-code",
+        "pkief.material-icon-theme",
+        "aaron-bond.better-comments",
+        "christian-kohler.path-intellisense",
+        "donjayamanne.githistory",
+        "mhutchie.git-graph"
+      ],
+      "settings": {
+        "python.defaultInterpreterPath": "/home/vscode/.local/bin/python",
+        "python.terminal.activateEnvironment": false,
+        "[python]": {
+          "editor.formatOnSave": true,
+          "editor.codeActionsOnSave": {
+            "source.fixAll.ruff": "explicit",
+            "source.organizeImports": "explicit"
+          },
+          "editor.defaultFormatter": "charliermarsh.ruff"
+        },
+        "ruff.enable": true,
+        "ruff.organizeImports": true,
+        "ruff.fixAll": true,
+        "python.testing.pytestEnabled": true,
+        "python.testing.unittestEnabled": false,
+        "python.testing.cwd": "/workspace",
+        "python.testing.pytestPath": "/home/vscode/.local/bin/pytest",
+        "python.testing.pytestArgs": ["tests/", "-v"],
+        "[javascript]": {
+          "editor.formatOnSave": true,
+          "editor.defaultFormatter": "esbenp.prettier-vscode",
+          "editor.codeActionsOnSave": {
+            "source.fixAll.eslint": "explicit"
+          }
+        },
+        "[typescript]": {
+          "editor.formatOnSave": true,
+          "editor.defaultFormatter": "esbenp.prettier-vscode",
+          "editor.codeActionsOnSave": {
+            "source.fixAll.eslint": "explicit"
+          }
+        },
+        "[json]": {
+          "editor.formatOnSave": true,
+          "editor.defaultFormatter": "esbenp.prettier-vscode"
+        },
+        "[jsonc]": {
+          "editor.formatOnSave": true,
+          "editor.defaultFormatter": "esbenp.prettier-vscode"
+        },
+        "[yaml]": {
+          "editor.formatOnSave": true,
+          "editor.defaultFormatter": "esbenp.prettier-vscode"
+        },
+        "[markdown]": {
+          "editor.formatOnSave": true,
+          "editor.defaultFormatter": "esbenp.prettier-vscode"
+        },
+        "eslint.enable": true,
+        "eslint.validate": ["javascript", "typescript"],
+        "prettier.requireConfig": false,
+        "files.associations": {
+          "*.py": "python",
+          "*.pyi": "python",
+          "requirements*.txt": "pip-requirements"
+        },
+        "files.exclude": {
+          "**/__pycache__": true,
+          "**/*.pyc": true,
+          "**/.ruff_cache": true,
+          "**/.mypy_cache": true,
+          "**/.pytest_cache": true,
+          "**/.coverage": true,
+          "**/htmlcov": true,
+          "**/node_modules": true
+        },
+        "search.exclude": {
+          "**/__pycache__": true,
+          "**/.ruff_cache": true,
+          "**/.mypy_cache": true,
+          "**/.pytest_cache": true,
+          "**/node_modules": true,
+          "**/dist": true
+        },
+        "editor.rulers": [88, 120],
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+          "source.organizeImports": "explicit",
+          "source.fixAll.ruff": "explicit"
+        },
+        "files.insertFinalNewline": true,
+        "files.trimTrailingWhitespace": true,
+        "terminal.integrated.defaultProfile.linux": "bash",
+        "terminal.integrated.profiles.linux": {
+          "bash": {
+            "path": "/bin/bash",
+            "icon": "terminal-bash"
+          }
+        },
+        "git.openRepositoryInParentFolders": "always",
+        "claude.maxTokens": 4000,
+        "claude.temperature": 0.1
+      }
+    }
+  },
+  "forwardPorts": [8000, 9222],
+  "portsAttributes": {
+    "8000": {
+      "label": "Application Server",
+      "onAutoForward": "notify"
+    },
+    "9222": {
+      "label": "Chrome DevTools",
+      "onAutoForward": "silent"
+    }
+  },
+  "postCreateCommand": ".devcontainer/setup.sh",
+  "postStartCommand": "echo '🚀 Development environment ready!' && sudo supervisord -c /etc/supervisor/conf.d/supervisord.conf && sleep 5 && (curl -s http://127.0.0.1:9222/json/version > /dev/null 2>&1 && echo '✅ Chrome DevTools started on port 9222' || echo '⚠️ Chrome DevTools may still be starting...')",
+  "containerEnv": {
+    "PYTHONPATH": "/workspace",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "PYTHONUNBUFFERED": "1",
+    "CHROME_PATH": "/usr/bin/google-chrome-stable",
+    "CHROME_REMOTE_DEBUGGING_PORT": "9222"
+  },
+  "remoteUser": "vscode"
+}
