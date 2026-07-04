@@ -7,8 +7,7 @@ services:
       POSTGRES_USER: ${POSTGRES_USER:-dev_user}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-dev_password}
     volumes:
-      # メジャーバージョンごとにボリュームを分離（旧バージョンのデータディレクトリ非互換による起動失敗を回避）
-      - postgres_data_17:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data
     restart: unless-stopped
     healthcheck:
       test: ['CMD-SHELL', 'pg_isready -U ${POSTGRES_USER:-dev_user} -d ${POSTGRES_DB:-dev_db}']
@@ -35,5 +34,5 @@ services:
     restart: unless-stopped
 
 volumes:
-  postgres_data_17:
+  postgres_data:
     driver: local
