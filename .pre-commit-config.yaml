@@ -4,7 +4,7 @@
 repos:
   # 基本的なファイルチェック
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v5.0.0
+    rev: v6.0.0
     hooks:
       - id: end-of-file-fixer
         name: ファイル末尾に改行を追加
@@ -31,9 +31,9 @@ repos:
 
   # Python: Ruff (lint + format + import sort)
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.8.5
+    rev: v0.15.20
     hooks:
-      - id: ruff
+      - id: ruff-check
         name: Ruff lint
         args: [--fix, --exit-non-zero-on-fix]
         exclude: ^src/alembic/
@@ -43,7 +43,7 @@ repos:
 
   # Python: MyPy (型チェック)
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.14.1
+    rev: v2.1.0
     hooks:
       - id: mypy
         name: MyPy型チェック
@@ -52,8 +52,9 @@ repos:
         exclude: ^src/alembic/
 
   # Node/JavaScript/TypeScript: Prettier
-  - repo: https://github.com/pre-commit/mirrors-prettier
-    rev: v4.0.0-alpha.8
+  # （pre-commit/mirrors-prettier はアーカイブ済みのため、保守されているミラーを使用）
+  - repo: https://github.com/rbubley/mirrors-prettier
+    rev: v3.9.4
     hooks:
       - id: prettier
         name: Prettier format
@@ -62,15 +63,15 @@ repos:
 
   # Node/JavaScript/TypeScript: ESLint
   - repo: https://github.com/pre-commit/mirrors-eslint
-    rev: v9.18.0
+    rev: v10.6.0
     hooks:
       - id: eslint
         name: ESLint
         types_or: [javascript, jsx, ts, tsx, vue]
         args: [--fix]
         additional_dependencies:
-          - eslint@^9.0.0
-          - eslint-config-prettier@^9.0.0
+          - eslint@^10.0.0
+          - eslint-config-prettier@^10.0.0
 
   # セキュリティチェック
   - repo: https://github.com/Yelp/detect-secrets
