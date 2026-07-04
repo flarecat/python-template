@@ -41,14 +41,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Set timezone to Asia/Tokyo
 RUN ln -sf /usr/share/zoneinfo/Asia/Tokyo /etc/localtime && echo 'Asia/Tokyo' > /etc/timezone
 
-# Install Node.js (required for Claude Code CLI and other tools)
+# Install Node.js (required for MCP servers and other tools)
 RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - \
     && apt-get install -y nodejs \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
-
-# Install Claude Code CLI
-RUN npm install -g @anthropic-ai/claude-code
 
 # Install MCP Chrome Bridge and Chrome DevTools MCP Server
 RUN npm install -g mcp-chrome-bridge chrome-devtools-mcp@latest
@@ -91,6 +88,9 @@ RUN echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc && \
     echo 'alias grep="grep --color=auto"' >> ~/.bashrc && \
     echo 'alias ..="cd .."' >> ~/.bashrc && \
     echo 'alias ...="cd ../.."' >> ~/.bashrc
+
+# Install Claude Code CLI (native installer, auto-updates in background)
+RUN curl -fsSL https://claude.ai/install.sh | bash
 
 # Install development-specific Python packages
 RUN pip install --no-cache-dir --user \
