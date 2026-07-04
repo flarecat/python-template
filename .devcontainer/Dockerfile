@@ -77,9 +77,11 @@ RUN chown -R vscode:vscode /workspace
 # Switch to non-root user
 USER vscode
 
+# ~/.local/bin（Claude Code・pip --userツール）を非対話プロセスからも参照可能にする
+ENV PATH="/home/vscode/.local/bin:${PATH}"
+
 # Set up development environment variables and shell configuration
-RUN echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc && \
-    echo 'export EDITOR=nano' >> ~/.bashrc && \
+RUN echo 'export EDITOR=nano' >> ~/.bashrc && \
     echo 'export PYTHONDONTWRITEBYTECODE=1' >> ~/.bashrc && \
     echo 'export PYTHONUNBUFFERED=1' >> ~/.bashrc && \
     echo 'alias ll="ls -alF"' >> ~/.bashrc && \
