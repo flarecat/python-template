@@ -327,6 +327,18 @@ psql -h postgres -U ${POSTGRES_USER} -d ${POSTGRES_DB}
 
 または VS Code の Database Client 拡張機能を使用。
 
+### 旧バージョンからのアップグレード
+
+PostgreSQL のメジャーバージョン更新に伴い、データボリュームは `postgres_data_17`
+に分離されています。旧テンプレート（PostgreSQL 15）を使用していた場合、古いボリュームは不要であれば削除してください：
+
+```bash
+# ホスト側で実行（プロジェクト名は .env の COMPOSE_PROJECT_NAME に合わせる）
+docker volume rm ${COMPOSE_PROJECT_NAME:-python-template}_postgres_data
+```
+
+旧データを引き継ぐ必要がある場合は、`pg_dump` でエクスポートしてから新環境で `psql` によりリストアしてください。
+
 ### ⚠️ 本番環境での注意事項
 
 **重要**: コード内のデフォルト値は開発環境専用です。本番環境では必ず環境変数を設定してください。
