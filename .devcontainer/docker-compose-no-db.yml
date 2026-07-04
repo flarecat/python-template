@@ -10,5 +10,5 @@ services:
     working_dir: /workspace
     command: sleep infinity
     environment:
-      - PYTHONPATH=/workspace
+      - PYTHONPATH=/workspace/src
     restart: unless-stopped
