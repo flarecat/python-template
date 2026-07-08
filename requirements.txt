@@ -1,11 +1,11 @@
 # Core dependencies
-# sqlalchemy==2.0.23
-# alembic==1.12.1
-# psycopg2-binary==2.9.9
-# python-dotenv==1.0.0
+# sqlalchemy==2.0.51
+# alembic==1.18.5
+# psycopg[binary]==3.3.4
+# python-dotenv==1.2.2
 
 # Example (uncomment as needed):
-# fastapi==0.104.1
-# uvicorn[standard]==0.24.0
-# pydantic==2.5.0
-# pydantic-settings==2.1.0
+# fastapi==0.139.0
+# uvicorn[standard]==0.50.0
+# pydantic==2.13.4
+# pydantic-settings==2.14.2

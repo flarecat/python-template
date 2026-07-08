@@ -1,7 +1,7 @@
 # ============================================
-# Python 3.12 Development Environment
+# Python 3.14 Development Environment
 # ============================================
-FROM python:3.12-slim
+FROM python:3.14-slim
 
 # Install system dependencies for development
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -41,14 +41,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Set timezone to Asia/Tokyo
 RUN ln -sf /usr/share/zoneinfo/Asia/Tokyo /etc/localtime && echo 'Asia/Tokyo' > /etc/timezone
 
-# Install Node.js (required for Claude Code CLI and other tools)
+# Install Node.js (required for MCP servers and other tools)
 RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - \
     && apt-get install -y nodejs \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
-
-# Install Claude Code CLI
-RUN npm install -g @anthropic-ai/claude-code
 
 # Install MCP Chrome Bridge and Chrome DevTools MCP Server
 RUN npm install -g mcp-chrome-bridge chrome-devtools-mcp@latest
@@ -80,9 +77,11 @@ RUN chown -R vscode:vscode /workspace
 # Switch to non-root user
 USER vscode
 
+# ~/.local/bin（Claude Code・pip --userツール）を非対話プロセスからも参照可能にする
+ENV PATH="/home/vscode/.local/bin:${PATH}"
+
 # Set up development environment variables and shell configuration
-RUN echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc && \
-    echo 'export EDITOR=nano' >> ~/.bashrc && \
+RUN echo 'export EDITOR=nano' >> ~/.bashrc && \
     echo 'export PYTHONDONTWRITEBYTECODE=1' >> ~/.bashrc && \
     echo 'export PYTHONUNBUFFERED=1' >> ~/.bashrc && \
     echo 'alias ll="ls -alF"' >> ~/.bashrc && \
@@ -91,6 +90,9 @@ RUN echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc && \
     echo 'alias grep="grep --color=auto"' >> ~/.bashrc && \
     echo 'alias ..="cd .."' >> ~/.bashrc && \
     echo 'alias ...="cd ../.."' >> ~/.bashrc
+
+# Install Claude Code CLI (native installer, auto-updates in background)
+RUN curl -fsSL https://claude.ai/install.sh | bash
 
 # Install development-specific Python packages
 RUN pip install --no-cache-dir --user \
@@ -111,13 +113,13 @@ RUN pip install --no-cache-dir --user \
     pyright \
     alembic \
     sqlalchemy \
-    psycopg2-binary \
+    "psycopg[binary]" \
     flaretool
 
 # Add comprehensive development aliases
 RUN echo '# Testing aliases' >> ~/.bashrc && \
-    echo 'alias pytest-all="python -m pytest tests/ -v"' >> ~/.bashrc && \
-    echo 'alias pytest-cov="python -m pytest tests/ --cov=. --cov-report=html"' >> ~/.bashrc && \
+    echo 'alias pytest-all="python -m pytest tests/"' >> ~/.bashrc && \
+    echo 'alias pytest-cov="python -m pytest tests/ --cov-report=html"' >> ~/.bashrc && \
     echo '# Type checking aliases' >> ~/.bashrc && \
     echo 'alias mypy-check="mypy ."' >> ~/.bashrc && \
     echo '# Code quality aliases (Ruff統一)' >> ~/.bashrc && \

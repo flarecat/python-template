@@ -1,7 +1,7 @@
 services:
   # PostgreSQL database for development
   postgres:
-    image: postgres:15
+    image: postgres:17
     environment:
       POSTGRES_DB: ${POSTGRES_DB:-dev_db}
       POSTGRES_USER: ${POSTGRES_USER:-dev_user}
@@ -10,7 +10,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
     restart: unless-stopped
     healthcheck:
-      test: ['CMD-SHELL', 'pg_isready -U dev_user -d dev_db']
+      test: ['CMD-SHELL', 'pg_isready -U ${POSTGRES_USER:-dev_user} -d ${POSTGRES_DB:-dev_db}']
       interval: 30s
       timeout: 10s
       retries: 3
@@ -26,8 +26,8 @@ services:
     working_dir: /workspace
     command: sleep infinity
     environment:
-      - DATABASE_URL=postgresql://${POSTGRES_USER:-dev_user}:${POSTGRES_PASSWORD:-dev_password}@postgres:5432/${POSTGRES_DB:-dev_db}
-      - PYTHONPATH=/workspace
+      - DATABASE_URL=postgresql+psycopg://${POSTGRES_USER:-dev_user}:${POSTGRES_PASSWORD:-dev_password}@postgres:5432/${POSTGRES_DB:-dev_db}
+      - PYTHONPATH=/workspace/src
     depends_on:
       postgres:
         condition: service_healthy

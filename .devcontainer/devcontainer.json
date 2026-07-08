@@ -1,5 +1,5 @@
 {
-  "name": "Python 3.12 Development",
+  "name": "Python 3.14 Development",
   "dockerComposeFile": "docker-compose.yml",
   "service": "app",
   "workspaceFolder": "/workspace",
@@ -22,7 +22,6 @@
         "mtxr.sqltools",
         "mtxr.sqltools-driver-pg",
         "cweijan.vscode-database-client2",
-        "ms-vscode.vscode-json",
         "redhat.vscode-yaml",
         "humao.rest-client",
         "yzhang.markdown-all-in-one",
@@ -123,9 +122,7 @@
             "icon": "terminal-bash"
           }
         },
-        "git.openRepositoryInParentFolders": "always",
-        "claude.maxTokens": 4000,
-        "claude.temperature": 0.1
+        "git.openRepositoryInParentFolders": "always"
       }
     }
   },
@@ -147,7 +144,7 @@
   "postCreateCommand": ".devcontainer/setup.sh",
   "postStartCommand": "echo '🚀 Development environment ready!' && sudo supervisord -c /etc/supervisor/conf.d/supervisord.conf && sleep 5 && (curl -s http://127.0.0.1:9222/json/version > /dev/null 2>&1 && echo '✅ Chrome DevTools started on port 9222' || echo '⚠️ Chrome DevTools may still be starting...')",
   "containerEnv": {
-    "PYTHONPATH": "/workspace",
+    "PYTHONPATH": "/workspace/src",
     "PYTHONDONTWRITEBYTECODE": "1",
     "PYTHONUNBUFFERED": "1",
     "CHROME_PATH": "/usr/bin/google-chrome-stable",

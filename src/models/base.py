@@ -1,10 +1,10 @@
 """ベースモデル定義"""
 
 from datetime import UTC, datetime
+from typing import Any
 
 from sqlalchemy import DateTime, Integer
-from sqlalchemy.ext.declarative import declared_attr
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, declared_attr, mapped_column
 
 from core.database import Base
 
@@ -33,7 +33,7 @@ class BaseModel(Base):
         """テーブル名を自動生成（クラス名の小文字）"""
         return cls.__name__.lower()
 
-    def to_dict(self) -> dict:
+    def to_dict(self) -> dict[str, Any]:
         """辞書形式に変換"""
         return {column.name: getattr(self, column.name) for column in self.__table__.columns}
 

@@ -1,6 +1,7 @@
 import os
 import sys
 from logging.config import fileConfig
+from pathlib import Path
 
 from dotenv import load_dotenv
 from sqlalchemy import engine_from_config, pool
@@ -11,13 +12,12 @@ from alembic import context
 load_dotenv()
 
 # Add the src directory to Python path for absolute imports
-src_path = os.path.dirname(os.path.dirname(__file__))
-sys.path.insert(0, src_path)
+src_path = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(src_path))
 
-# Import database models
-from core.database import Base
-from models.base import BaseModel
-from models.user import User
+# Import database models (importing the package registers all models on Base.metadata)
+from core.database import Base  # noqa: E402
+import models  # noqa: E402, F401
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -28,7 +28,7 @@ config.set_main_option(
     "sqlalchemy.url",
     os.getenv(
         "DATABASE_URL",
-        "postgresql://dev_user:dev_password@postgres:5432/dev_db",
+        "postgresql+psycopg://dev_user:dev_password@postgres:5432/dev_db",
     ),
 )
 

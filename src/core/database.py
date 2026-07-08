@@ -3,18 +3,21 @@
 import os
 from collections.abc import Generator
 
-from sqlalchemy import MetaData, create_engine
+from sqlalchemy import create_engine
 from sqlalchemy.orm import DeclarativeBase, Session, sessionmaker
 
 # 環境変数からデータベースURLを取得
-DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://dev_user:dev_password@postgres:5432/dev_db")
+DATABASE_URL = os.getenv("DATABASE_URL", "postgresql+psycopg://dev_user:dev_password@postgres:5432/dev_db")
+
+# PostgreSQL接続時のみタイムゾーンをUTCに固定する
+_connect_args: dict[str, str] = {"options": "-c timezone=UTC"} if DATABASE_URL.startswith("postgresql") else {}
 
 # SQLAlchemy エンジン作成
 engine = create_engine(
     DATABASE_URL,
     echo=False,  # SQLログ出力（開発時はTrueに変更可能）
     pool_pre_ping=True,  # 接続チェック
-    connect_args={"options": "-c timezone=UTC"},  # タイムゾーン設定
+    connect_args=_connect_args,
 )
 
 # セッションファクトリ
@@ -25,14 +28,8 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 class Base(DeclarativeBase):
     """SQLAlchemy モデルのベースクラス"""
 
-    pass
 
-
-# メタデータ（Alembicで使用）
-metadata = MetaData()
-
-
-def get_db() -> Generator[Session, None, None]:
+def get_db() -> Generator[Session]:
     """
     データベースセッション取得（FastAPI Depends用）
 
